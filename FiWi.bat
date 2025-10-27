@@ -241,7 +241,7 @@ cls
 color %CURRENT_COLOR%
 echo.
 echo ╔══════════════════════════════════════════════════════════════╗
-echo ║                    WiFi Şifre Yöneticisi                     ║
+echo ║                          - FiWi -                            ║
 echo ║                        by an1lbayram                         ║
 echo ╚══════════════════════════════════════════════════════════════╝
 echo.
@@ -249,4 +249,5 @@ echo Script kapatılıyor...
 echo Teşekkürler!
 echo.
 timeout /t 5 /nobreak >nul
+
 exit
