@@ -66,12 +66,27 @@ It runs fully locally; no data is sent outside.
 
 ---
 
-## 💡 Alternatif (PowerShell üzerinden çalıştırma) / Alternative (via PowerShell)
+💡 Alternatif (PowerShell üzerinden çalıştırma) / Alternative (via PowerShell)
+
+TR:
+FiWi’yi doğrudan PowerShell üzerinden indirip çalıştırabilirsiniz. Aşağıdaki komutlardan birini kullanın:
+
+EN:
+You can directly download and run FiWi via PowerShell. Use one of the commands below:
 
 **TR / EN:**
+# Seçenek 1 – Curl yöntemi (Windows 10+ veya Git Bash kullanıcıları için)
+# Option 1 – Using Curl (for Windows 10+ or Git Bash users)
 ```powershell
-curl -O https://github.com/an1lbayram/FiWi/raw/main/fiwi.bat
-.\fiwi.bat
+curl -O https://github.com/an1lbayram/FiWi/raw/main/FiWi.bat
+.\FiWi.bat
+```
+
+# Seçenek 2 – PowerShell’in yerel yöntemi (her sürümde çalışır)
+# Option 2 – Native PowerShell method (works on all versions)
+```powershell
+Invoke-WebRequest -Uri "https://github.com/an1lbayram/FiWi/raw/main/FiWi.bat" -OutFile "FiWi.bat"
+.\FiWi.bat
 ```
 
 ---
