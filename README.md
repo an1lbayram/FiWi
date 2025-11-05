@@ -1,40 +1,59 @@
-# FiWi
+# FiWi 1.1
 Instantly reveal saved WiFi passwords on Windows lightweight CMD tool. - Windows’ta kayıtlı WiFi şifrelerini anında görüntüleyin.
 
-# FiWi - WiFi Password Manager for Windows (CMD)
+# FiWi 1.1 - WiFi Password Manager for Windows (CMD)
 
-🔍 **TR:** Windows'ta kayıtlı WiFi şifrelerini anında görüntüleyen basit, taşınabilir bir batch aracı.  
-🔍 **EN:** Instantly reveal your saved WiFi passwords on Windows using a simple portable batch tool.
+🔹 Now with full Turkish & English language support!
+🔹 Artık Türkçe ve İngilizce dil desteğiyle!
+
+🔍 TR: Windows'ta kayıtlı WiFi şifrelerini anında görüntüleyen basit, taşınabilir bir batch aracı.
+🔍 EN: Instantly reveal your saved WiFi passwords on Windows using a simple portable batch tool.
 
 ---
 
 ## 📘 Hakkında / About
 
 **TR:**  
-FiWi, Windows üzerinde `netsh` komutunu kullanarak cihazınızda daha önce kaydedilmiş WiFi profillerini listeleyen ve seçilen profilin şifresini gösteren küçük, taşınabilir bir CMD (.bat) aracıdır.  
+FiWi, Windows üzerinde `netsh` komutunu kullanarak cihazınızda daha önce kaydedilmiş WiFi profillerini listeleyen ve seçilen profilin şifresini gösteren küçük, taşınabilir bir CMD (.bat) aracıdır. 
+Bu sürümle birlikte, Türkçe ve İngilizce dil seçenekleri eklenmiştir.
 Tamamen yerel çalışır; hiçbir veri dışarı gönderilmez.
 
 **EN:**  
-FiWi is a small portable CMD (.bat) tool that lists saved WiFi profiles on your Windows machine using `netsh` and displays the password for the selected profile.  
+FiWi is a small portable CMD (.bat) tool that lists saved WiFi profiles on your Windows machine using `netsh` and displays the password for the selected profile.
+This version introduces Turkish and English language support.
 It runs fully locally; no data is sent outside.
 
 ---
 
 ## ✨ Özellikler / Features
 
-**TR:**
-- Kayıtlı WiFi profillerini listeler  
-- Seçilen profilin (kaydedilmişse) şifresini gösterir  
-- CLI renk temaları (isteğe bağlı)  
-- Tek dosya, kurulum gerektirmez  
-- İnternet bağlantısı gerekmez  
+TR:
 
-**EN:**
-- Lists saved WiFi profiles  
-- Reveals the password of the selected profile (if available)  
-- CLI color themes (optional)  
-- Single-file, no installation required  
-- Works fully offline  
+Kayıtlı WiFi profillerini listeler
+
+Seçilen profilin (kaydedilmişse) şifresini gösterir
+
+CLI renk temaları (isteğe bağlı)
+
+TR/EN dil seçeneği (1.1 ile yeni)
+
+Tek dosya, kurulum gerektirmez
+
+İnternet bağlantısı gerekmez
+
+EN:
+
+Lists saved WiFi profiles
+
+Reveals the password of the selected profile (if available)
+
+CLI color themes (optional)
+
+TR/EN language selection (new in 1.1)
+
+Single-file, no installation required
+
+Works fully offline 
 
 ---
 
