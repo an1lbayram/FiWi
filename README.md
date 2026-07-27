@@ -1,187 +1,102 @@
-# FiWi 1.1
-Instantly reveal saved WiFi passwords on Windows lightweight CMD tool. - Windows’ta kayıtlı WiFi şifrelerini anında görüntüleyin.
+# 📶 FiWi v1.1 - WiFi Password Manager for Windows
 
-# FiWi 1.1 - WiFi Password Manager for Windows (CMD)
+![Windows](https://img.shields.io/badge/OS-Windows%207%2B-blue?logo=windows)
+![Batch](https://img.shields.io/badge/Language-Batch%20%2F%20CMD-4D5B99)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-🔹 Now with full Turkish & English language support!
-🔹 Artık Türkçe ve İngilizce dil desteğiyle!
+> **Instantly reveal saved WiFi passwords on Windows lightweight CMD tool.**  
+> *Windows’ta kayıtlı WiFi şifrelerini anında görüntüleyin.*
 
-🔍 TR: Windows'ta kayıtlı WiFi şifrelerini anında görüntüleyen basit, taşınabilir bir batch aracı.
-🔍 EN: Instantly reveal your saved WiFi passwords on Windows using a simple portable batch tool.
-
----
-
-## 📘 Hakkında / About
-
-**TR:**  
-FiWi, Windows üzerinde `netsh` komutunu kullanarak cihazınızda daha önce kaydedilmiş WiFi profillerini listeleyen ve seçilen profilin şifresini gösteren küçük, taşınabilir bir CMD (.bat) aracıdır. 
-Bu sürümle birlikte, Türkçe ve İngilizce dil seçenekleri eklenmiştir.
-Tamamen yerel çalışır; hiçbir veri dışarı gönderilmez.
-
-**EN:**  
-FiWi is a small portable CMD (.bat) tool that lists saved WiFi profiles on your Windows machine using `netsh` and displays the password for the selected profile.
-This version introduces Turkish and English language support.
-It runs fully locally; no data is sent outside.
+🔹 **TR:** Windows üzerinde `netsh` komutunu kullanarak cihazınızda daha önce kaydedilmiş WiFi profillerini listeleyen ve seçilen profilin şifresini gösteren hafif, taşınabilir bir batch (.bat) aracı.  
+🔹 **EN:** A lightweight portable CMD (.bat) tool that lists saved WiFi profiles on your Windows machine using `netsh` and displays the password for the selected profile.
 
 ---
 
 ## ✨ Özellikler / Features
 
-TR:
-
-Kayıtlı WiFi profillerini listeler
-
-Seçilen profilin (kaydedilmişse) şifresini gösterir
-
-CLI renk temaları (isteğe bağlı)
-
-TR/EN dil seçeneği (1.1 ile yeni)
-
-Tek dosya, kurulum gerektirmez
-
-İnternet bağlantısı gerekmez
-
-EN:
-
-Lists saved WiFi profiles
-
-Reveals the password of the selected profile (if available)
-
-CLI color themes (optional)
-
-TR/EN language selection (new in 1.1)
-
-Single-file, no installation required
-
-Works fully offline 
+| TR | EN |
+|---|---|
+| 📋 Kayıtlı WiFi profillerini listeleme | Lists all saved WiFi profiles |
+| 🔑 Seçilen ağın şifresini görüntüleme | Reveals the password of the selected profile |
+| 🎨 Özelleştirilebilir CLI renk temaları | Optional CLI color themes |
+| 🌐 TR / EN çoklu dil desteği (v1.1) | Full TR/EN language selection |
+| ⚡ Tek dosya, kurulum gerektirmez | Single-file, zero installation |
+| 🔒 Tamamen yerel ve offline çalışır | 100% local, works fully offline |
 
 ---
 
-## ⚙️ Gereksinimler / Requirements
+## 💻 Sistem Gereksinimleri / Requirements
 
-**TR:**
-- Windows 7 veya üzeri  
-- `netsh` komutunun sistemde bulunması  
-- Bazı ağlar için yönetici izni gerekebilir  
-
-**EN:**
-- Windows 7 or newer  
-- `netsh` command must be available  
-- Some networks may require admin privileges  
+- **Windows 7 / 8 / 10 / 11**
+- `netsh` komutunun sistemde kullanılabilir olması (Windows'ta varsayılandır).
+- Bazı sistemlerde kayıtlı şifreleri okumak için **Yönetici Yetkisi** gerekebilir.
 
 ---
 
-## 🚀 Kullanım / Usage
+## 🚀 Kurulum ve Çalıştırma / Quick Start
 
-**TR:**
-1. `fiwi.bat` dosyasını indirin.  
-2. Dosyaya sağ tıklayıp **“Yönetici olarak çalıştırın”** (gerekirse).  
-3. Menüden işlem seçin: ağ listesini görüntüleyin veya bir profil seçip şifresini görün.  
+### ⚡ Tek Satırda İndir ve Çalıştır (PowerShell One-Liner)
 
-**EN:**
-1. Download the `fiwi.bat` file.  
-2. Right-click → **“Run as administrator”** (if needed).  
-3. From the menu, choose to list networks or view a password.  
+PowerShell uygulamanızı açıp aşağıdaki **tek komut satırını** kopyalayıp yapıştırarak FiWi'yi anında indirip çalıştırabilirsiniz:
 
----
-
-💡 Alternatif (PowerShell üzerinden çalıştırma) / Alternative (via PowerShell)
-
-TR:
-FiWi’yi doğrudan PowerShell üzerinden indirip çalıştırabilirsiniz. Aşağıdaki komutlardan birini kullanın:
-
-EN:
-You can directly download and run FiWi via PowerShell. Use one of the commands below:
-
-**TR / EN:**
-# Seçenek 1 – Curl yöntemi (Windows 10+ veya Git Bash kullanıcıları için)
-# Option 1 – Using Curl (for Windows 10+ or Git Bash users)
 ```powershell
-curl -O https://github.com/an1lbayram/FiWi/raw/main/FiWi.bat
-.\FiWi.bat
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/an1lbayram/FiWi/main/FiWi.bat" -OutFile "FiWi.bat"; .\FiWi.bat
 ```
 
-# Seçenek 2 – PowerShell’in yerel yöntemi (her sürümde çalışır)
-# Option 2 – Native PowerShell method (works on all versions)
+*(Git kullananlar için tek satır klonlama):*
 ```powershell
-Invoke-WebRequest -Uri "https://github.com/an1lbayram/FiWi/raw/main/FiWi.bat" -OutFile "FiWi.bat"
-.\FiWi.bat
+git clone https://github.com/an1lbayram/FiWi.git; cd FiWi; .\FiWi.bat
 ```
 
 ---
 
-🧩 Örnek Çıktı / Example Output
+### 📋 Adım Adım Kurulum (Hiç Bilmeyenler İçin / Step-by-Step)
 
-TR:
+#### 1️⃣ Terminali / Komut İstemcisini Açın
+- Başlat menüsüne **PowerShell** veya **CMD** yazın.
+- Sağ tıklayıp **"Yönetici olarak çalıştır"** deyin.
 
+#### 2️⃣ `FiWi.bat` Dosyasını İndirin
+[GitHub Deposu](https://github.com/an1lbayram/FiWi) üzerinden `FiWi.bat` dosyasını bilgisayarınıza indirin veya yukarıdaki `Invoke-WebRequest` komutunu çalıştırın.
+
+#### 3️⃣ Dosyayı Çalıştırın
+Komut satırında indirilen dizine geçip dosyayı çalıştırın:
+```cmd
+FiWi.bat
+```
+
+#### 4️⃣ Menüden İşleminizi Seçin
+Uygulama açıldığında:
+1. **Dil Seçimi:** `1` (Türkçe) veya `2` (English) tuşlayın.
+2. **İşlem Seçimi:** Kayıtlı ağ listesinden görmek istediğiniz WiFi ağının numarasını girin. Seçtiğiniz ağın parolası ekranda görüntülenecektir!
+
+---
+
+## 🧩 Örnek Çıktı / Example Output
+
+```text
+========================================
 1- HomeWiFi
 2- OfficeNetwork
 3- MobileHotspot
+========================================
 
-Seçiminizi girin: 2
-Seçilen WiFi Ağı: OfficeNetwork
-Şifre: work@2025
+Seçiminizi girin / Enter selection: 2
 
-
-EN:
-
-1- HomeWiFi
-2- OfficeNetwork
-3- MobileHotspot
-
-Enter your selection: 2
-Selected WiFi: OfficeNetwork
-Password: work@2025
+[+] Seçilen WiFi Ağı: OfficeNetwork
+[+] Parola / Password: work@2025
+```
 
 ---
 
-⚠️ Uyarı / Disclaimer
+## ⚠️ Yasal Uyarı / Disclaimer
 
-TR:
-Bu araç yalnızca kendi cihazınızda kayıtlı WiFi profillerini görüntülemek içindir.
-Başkalarının ağlarına ait bilgileri izinsiz görüntülemek veya paylaşmak etik değildir ve yasal sorumluluk doğurabilir.
-FiWi geliştiricisi bu tür kullanımlardan sorumlu tutulamaz.
-
-EN:
-This tool is intended only for viewing WiFi profiles saved on your own device.
-Viewing or sharing credentials from networks without permission is unethical and may be illegal.
-The FiWi author is not responsible for misuse.
+Bu araç yalnızca kendi cihazınızda daha önce kaydedilmiş WiFi ağlarına ait parolaları görüntülemek amacıyla tasarlanmıştır. İzin almadan başkalarına ait ağ bilgilerini erişmek veya paylaşmak yasa dışı olabilir. Geliştirici kötüye kullanımlardan sorumlu tutulamaz.
 
 ---
 
-🧾 Lisans / License
+## 📄 Lisans / License
 
-TR:
-Bu proje MIT Lisansı
- ile yayımlanmıştır. Ayrıntılar için LICENSE dosyasına bakabilirsiniz.
+Bu proje [MIT Lisansı](LICENSE) altında yayımlanmıştır.
 
-EN:
-This project is released under the MIT License
-. See the LICENSE file for details.
-
----
-
-🤝 Katkı / Contributing
-
-TR:
-Hatalar, öneriler veya PR’lar için GitHub Issues bölümünü kullanabilirsiniz.
-Büyük değişiklikler için önce bir Issue açıp tartışmanız önerilir.
-
-EN:
-Please use GitHub Issues for bugs, suggestions or pull requests.
-For major changes, open an Issue first to discuss.
-
----
-
-👨‍💻 Geliştirici / Developer
-
-Developed by an1lbayram
-- GitHub: https://github.com/an1lbayram
-- LinkedIn: https://www.linkedin.com/in/an1lbayram
-- Medium: https://medium.com/@anl1bayram
-- Mail: anilbayram48@gmail.com
-
----
-
-⭐ Eğer bu aracı faydalı bulduysanız, projeye bir star bırakmayı unutmayın!
-If you find this tool useful, don’t forget to give it a star ⭐
+**Geliştirici:** [Anıl Bayram](https://github.com/an1lbayram)
