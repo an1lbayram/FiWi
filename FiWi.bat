@@ -3,8 +3,21 @@
 :: FiWi1.1 - Windows WiFi Password Viewer
 :: Author: an1lbayram
 :: License: MIT
+:: NOT: WiFi sifresi (Key Content) okuma islevi netsh'in metin
+::      ciktisindaki sabit alan sirasina dayanir ve yalnizca
+::      Ingilizce Windows uzerinde test edilmistir. Farkli dil
+::      paketlerinde sifre bulunamayabilir; bu durumda "netsh wlan
+::      show profile name=<profil> key=clear" komutunu elle calistirip
+::      "Key Content" karsiligi alani kontrol edebilirsiniz.
 :: =============================================
 title FiWi1.1 - by an1lbayram
+
+:: Orijinal codepage'i sakla (script sonunda geri yuklenecek)
+set "orig_cp="
+for /f "tokens=2 delims=:" %%a in ('chcp') do set "orig_cp=%%a"
+set "orig_cp=%orig_cp:.=%"
+for /f "tokens=* delims= " %%b in ("%orig_cp%") do set "orig_cp=%%b"
+
 chcp 65001 >nul
 setlocal enabledelayedexpansion
 
@@ -166,12 +179,21 @@ echo ╚════════════════════════
 echo.
 
 :: WiFi profillerini al
+:: NOT: "findstr" ile anahtar kelime aramak yerine, netsh ciktisinda
+:: profil satirlarinin girintili (bosluk ile baslayan) ve ":" sonrasinda
+:: bos olmayan bir deger icermesi ozelligini kullaniyoruz. Bu yaklasim
+:: "All User Profile" etiketinin dile gore degismesinden etkilenmez.
 set counter=0
-for /f "tokens=2 delims=:" %%i in ('netsh wlan show profiles ^| findstr "All User Profile"') do (
-    set "profile=%%i"
-    set "profile=!profile:~1!"
-    set /a counter+=1
-    echo !counter!- !profile!
+for /f "tokens=1,* delims=:" %%i in ('netsh wlan show profiles') do (
+    set "line_key=%%i"
+    set "line_val=%%j"
+    if defined line_val (
+        if "!line_key:~0,1!"==" " (
+            for /f "tokens=* delims= " %%v in ("!line_val!") do set "profile=%%v"
+            set /a counter+=1
+            echo !counter!- !profile!
+        )
+    )
 )
 
 if %counter%==0 (
@@ -213,12 +235,19 @@ set counter=0
 set profiles[0]=
 
 :: WiFi profillerini al ve diziye kaydet
-for /f "tokens=2 delims=:" %%i in ('netsh wlan show profiles ^| findstr "All User Profile"') do (
-    set "profile=%%i"
-    set "profile=!profile:~1!"
-    set /a counter+=1
-    set "profiles[!counter!]=!profile!"
-    echo !counter!- !profile!
+:: NOT: Locale-bagimsiz ayristirma icin girinti + ":" sonrasi deger
+:: kontrolu kullaniliyor (bkz. SHOW_NETWORKS bolumundeki aciklama).
+for /f "tokens=1,* delims=:" %%i in ('netsh wlan show profiles') do (
+    set "line_key=%%i"
+    set "line_val=%%j"
+    if defined line_val (
+        if "!line_key:~0,1!"==" " (
+            for /f "tokens=* delims= " %%v in ("!line_val!") do set "profile=%%v"
+            set /a counter+=1
+            set "profiles[!counter!]=!profile!"
+            echo !counter!- !profile!
+        )
+    )
 )
 
 if %counter%==0 (
@@ -270,12 +299,32 @@ if %selection% GTR %counter% (
 :: Seçilen profili al
 set "selected_profile=!profiles[%selection%]!"
 
+:: Güvenlik kontrolü: profil adı, netsh komutuna geçirilmeden önce
+:: komut satırını bozabilecek özel karakterler (^ & | ") içeriyor mu?
+set "profile_check=!selected_profile!"
+set "profile_check=!profile_check:^=X!"
+set "profile_check=!profile_check:&=X!"
+set "profile_check=!profile_check:|=X!"
+set "profile_check=!profile_check:"=X!"
+if not "!profile_check!"=="!selected_profile!" (
+    if "%LANG%"=="TR" (
+        echo Bu WiFi profil adinda guvensiz karakter tespit edildi ^(^^ ^& ^| " ^). Islem durduruldu.
+    ) else (
+        echo Unsafe character detected in this WiFi profile name ^(^^ ^& ^| " ^). Operation aborted.
+    )
+    echo.
+    pause
+    goto SHOW_PASSWORDS
+)
+
 echo.
 echo %PASSWORD_SELECTED% %selected_profile%
 echo %PASSWORD_SEARCHING%
 echo.
 
-:: Şifreyi al
+:: Şifreyi al (önceki aramadan kalan değeri temizle, aksi halde bir
+:: önceki agin sifresi yanlislikla yeni aga ait gibi gosterilebilir)
+set "password="
 for /f "tokens=2 delims=:" %%i in ('netsh wlan show profile name^="%selected_profile%" key^=clear ^| findstr "Key Content"') do (
     set "password=%%i"
     set "password=!password:~1!"
@@ -394,4 +443,5 @@ echo %EXIT_MESSAGE1%
 echo %EXIT_MESSAGE2%
 echo.
 timeout /t 5 /nobreak >nul
+if defined orig_cp chcp %orig_cp% >nul
 exit
