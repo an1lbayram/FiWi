@@ -1,0 +1,135 @@
+name: Smoke Test
+
+# FiWi.bat is an interactive Windows batch tool. `chcp 65001` on line 21
+# discards any input already sitting in a redirected/piped stdin buffer
+# before the first prompt reads it (root-caused via manual testing, see
+# TESTING.md -> "Verified Findings" #1). Driving the menu via piped input
+# is therefore not a flakiness problem a timeout can fix -- it's a
+# design-level defect in the script -- so this workflow does not attempt
+# it. It relies on deterministic regex checks plus a non-interactive
+# launch check instead.
+
+on:
+  push:
+    paths:
+      - "FiWi.bat"
+      - ".github/workflows/smoke-test.yml"
+  pull_request:
+    paths:
+      - "FiWi.bat"
+      - ".github/workflows/smoke-test.yml"
+
+jobs:
+  smoke-test:
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Numeric input validator regression checks
+        shell: cmd
+        run: |
+          setlocal enabledelayedexpansion
+          set FAIL=0
+
+          call :check 5 VALID
+          call :check 05 VALID
+          call :check -1 INVALID
+          call :check 5.0 INVALID
+          call :check 5a INVALID
+          call :check "" INVALID
+
+          if "!FAIL!"=="1" (
+            echo One or more numeric validator checks failed.
+            exit /b 1
+          )
+          exit /b 0
+
+          :check
+          set "input=%~1"
+          set "expected=%~2"
+          echo %input%| findstr /r "^[0-9][0-9]*$" >nul
+          if errorlevel 1 (set "actual=INVALID") else (set "actual=VALID")
+          if not "!actual!"=="!expected!" (
+            echo MISMATCH: input="!input!" expected=!expected! actual=!actual!
+            set FAIL=1
+          ) else (
+            echo ok: input="!input!" -^> !actual!
+          )
+          exit /b 0
+
+      - name: Unsafe-character sanitizer regression checks
+        shell: cmd
+        run: |
+          setlocal enabledelayedexpansion
+          set FAIL=0
+          set QUOTE=^"
+
+          set "name=CleanNetworkName" & set "expected=SAFE" & call :check
+          set "name=Bad^Name" & set "expected=UNSAFE" & call :check
+          set "name=Bad&Name" & set "expected=UNSAFE" & call :check
+          set "name=Bad|Name" & set "expected=UNSAFE" & call :check
+          set "name=Bad!QUOTE!Name" & set "expected=UNSAFE" & call :check
+
+          if "!FAIL!"=="1" (
+            echo One or more sanitizer checks failed.
+            exit /b 1
+          )
+          exit /b 0
+
+          :check
+          set "check=!name!"
+          set "check=!check:^=X!"
+          set "check=!check:&=X!"
+          set "check=!check:|=X!"
+          set "check=!check:"=X!"
+          if not "!check!"=="!name!" (set "actual=UNSAFE") else (set "actual=SAFE")
+          if not "!actual!"=="!expected!" (
+            echo MISMATCH: name="!name!" expected=!expected! actual=!actual!
+            set FAIL=1
+          ) else (
+            echo ok: name="!name!" -^> !actual!
+          )
+          exit /b 0
+
+      - name: FiWi.bat launch smoke test (no menu navigation)
+        shell: pwsh
+        run: |
+          # Does NOT attempt to select a language or navigate the menu --
+          # piped input past chcp 65001 is silently dropped (see the note
+          # at the top of this file), so any such attempt would be
+          # testing a known-broken path, not the script's real behavior.
+          # This only confirms the script launches, parses cleanly, and
+          # reaches its first prompt without crashing.
+          $emptyInput = Join-Path $env:RUNNER_TEMP "fiwi-empty-input.txt"
+          New-Item -ItemType File -Path $emptyInput -Force | Out-Null
+
+          $outFile = Join-Path $env:RUNNER_TEMP "fiwi-launch-output.txt"
+          $errFile = Join-Path $env:RUNNER_TEMP "fiwi-launch-error.txt"
+
+          $proc = Start-Process -FilePath "cmd.exe" `
+            -ArgumentList "/c", "`"$($env:GITHUB_WORKSPACE)\FiWi.bat`"" `
+            -WorkingDirectory $env:GITHUB_WORKSPACE `
+            -RedirectStandardInput $emptyInput `
+            -RedirectStandardOutput $outFile `
+            -RedirectStandardError $errFile `
+            -PassThru -WindowStyle Hidden
+
+          Start-Sleep -Seconds 5
+          $stillRunning = -not $proc.HasExited
+          if ($stillRunning) {
+            Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
+          }
+
+          $output = Get-Content $outFile -Raw -ErrorAction SilentlyContinue
+          Write-Host $output
+
+          if (-not $stillRunning) {
+            Write-Host "::error::FiWi.bat exited before reaching its first prompt (should be waiting on input)."
+            exit 1
+          }
+          if ($output -notmatch "FiWi 1.1" -or $output -notmatch "Turkish") {
+            Write-Host "::error::Expected banner/menu text not found in output."
+            exit 1
+          }
+          Write-Host "FiWi.bat launched and reached the language prompt correctly."
