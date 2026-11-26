@@ -99,4 +99,4 @@ Bu araç yalnızca kendi cihazınızda daha önce kaydedilmiş WiFi ağlarına a
 
 Bu proje [MIT Lisansı](LICENSE) altında yayımlanmıştır.
 
-**Geliştirici:** [Anıl Bayram](https://github.com/an1lbayram)
+**Geliştirici:** [Anıl Bayram](https://an1lbayram.vercel.app/) | [GitHub](https://github.com/an1lbayram)
